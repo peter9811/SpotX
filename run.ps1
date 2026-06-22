@@ -1,3 +1,6 @@
+# ==============================================================================
+# SpotX - Spotify Desktop Client Patcher for Windows
+# ==============================================================================
 [CmdletBinding()]
 param
 (
@@ -147,7 +150,14 @@ param
 # Ignore errors from `Stop-Process`
 $PSDefaultParameterValues['Stop-Process:ErrorAction'] = [System.Management.Automation.ActionPreference]::SilentlyContinue
 
+# --- Utility Functions ---
 function Format-LanguageCode {
+function Test-IsAdmin {
+    $id = [Security.Principal.WindowsIdentity]::GetCurrent()
+    $principal = New-Object Security.Principal.WindowsPrincipal($id)
+    return $principal.IsInRole([Security.Principal.WindowsBuiltInRole]::Administrator)
+}
+
 
     # Normalizes and confirms support of the selected language.
     [CmdletBinding()]
@@ -325,6 +335,7 @@ function Format-LanguageCode {
     return $returnCode
 }
 
+# --- Main Script Execution Start ---
 $spotifyDirectory = Join-Path $env:APPDATA 'Spotify'
 $spotifyDirectory2 = Join-Path $env:LOCALAPPDATA 'Spotify'
 
@@ -426,6 +437,12 @@ function CallLang($clg) {
 $langCode = Format-LanguageCode -LanguageCode $Language
 
 $lang = CallLang -clg $langCode
+
+# Check for Administrator privileges if needed
+# if (-not (Test-IsAdmin)) {
+#     Write-Warning "Running without Administrator privileges. Some actions may fail."
+# }
+
 
 Write-Host ($lang).Welcome
 Write-Host
@@ -1376,6 +1393,7 @@ function Invoke-SpotifyDownloadAttempt {
     }
 }
 
+# --- Download Logic ---
 function downloadSp([string]$DownloadFolder) {
 
     $webClient = New-Object -TypeName System.Net.WebClient
@@ -1790,7 +1808,7 @@ if ($langCode -eq 'ru' -and [version]$offline -ge [version]"1.1.92.644") {
 }
 
 if ($podcasts_off) {
-    Write-Host ($lang).PodcatsOff`n
+    Write-Host ($lang).PodcastsOff`n
     $ch = 'y'
 }
 if ($podcasts_on) {
@@ -1800,7 +1818,7 @@ if ($podcasts_on) {
 if (!($podcasts_off) -and !($podcasts_on)) {
 
     do {
-        $ch = Read-Host -Prompt ($lang).PodcatsSelect
+        $ch = Read-Host -Prompt ($lang).PodcastsSelect
         Write-Host
         if (!($ch -eq 'n' -or $ch -eq 'y')) { incorrectValue }
     }
@@ -2381,6 +2399,7 @@ function Helper($paramname, [switch]$CheckOnly) {
     $paramdata
 }
 
+# --- Patching & Extraction Logic ---
 function extract ($counts, $method, $name, $helper, $add, $patch) {
     $zip = $null
     $reader = $null
@@ -2641,6 +2660,7 @@ function Extract-WebpackModules {
     return $decodedString
 }
 
+# --- Binary Patching Helpers ---
 function Reset-Dll-Sign {
     [CmdletBinding()]
     param (
