@@ -25,9 +25,9 @@
     Recom           = "გინდათ რო ჩაიწეროთ რეკომენდირებული {0} ვერსია ? [Y/N]"
     DownSpoti       = "ვტვირთავთ და ვიწერთ Spotify-ს"
     DownSpoti2      = "გთხოვთ დაიცადოთ..."
-    PodcatsOff      = "პოდკასტები გათიშული"
+    PodcastsOff      = "პოდკასტები გათიშული"
     PodcastsOn      = "პოდკასტები ჩართული"
-    PodcatsSelect   = "Do you want to disable podcasts, episodes and audiobooks from the main page? [Y/N]" #
+    PodcastsSelect   = "Do you want to disable podcasts, episodes and audiobooks from the main page? [Y/N]" #
     DowngradeNote   = "რეკომენდირებული რომ დაბლოკოთ იმიტომ რომ იყო Spotify-ს დაქვეითება"
     UpdBlock        = "Spotify-ს განახლებები დაბლოკილია"
     UpdUnblock      = "Spotify-ს განახლებები არ არის დაბლოკილი"
